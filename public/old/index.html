@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>アンケートFORM</title>
+    <style>
+      h1 {
+        width: 100%;
+        height: 130px;
+        background: lavender;
+        padding-left: 30px;
+        padding-right: 30px;
+        box-sizing: border-box;
+      }
+
+      .btn {
+        border-radius: 10px;
+        background-color: lavender;
+        padding: 18px;
+        text-decoration: none;
+        color: black;
+        font-size: 130%;
+      }
+
+      .tarea{
+          display: inline-block;
+          width: 100%;
+          padding: 45px;
+          border: 1px solid #999;
+          box-sizing: border-box;
+          background: #f2f2f2;
+          margin: 0.5em 0;
+          line-height: 1.5;
+          height: 6em;
+      }
+
+    </style>
+    <script defer src="/__/firebase/7.14.2/firebase-app.js"></script>
+    <script defer src="/__/firebase/7.14.2/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+    <!link rel="stylesheet" href="style.css">
+  </head>
+  <h1><br>ご体験いただきありがとうございました!!</h1>
+  <form>
+    <h2>体験していかがでしたか？</h2>
+    <ul>
+      <input type="checkbox" id="asses" value="verygood">大変良かった<br>
+      <input type="checkbox" id="asses2" value="good">良かった<br>
+      <input type="checkbox" id="asses3" value="bad">あまり良くなかった<br>
+    </ul>
+    <br>
+    <h2>感想 (改善したほうが良い点)を<br>下記記入いただけると大変ありがたいです</h2>
+  </form>
+
+  <body>
+    <div>
+      <input type="text" textarea class="tarea"  id="sendtext-text">
+      <br> <br>
+      <button id="sendtext-btn" class="btn" onclick="location.href='./index2.html'">送信（クリック）</button>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // wite
+        var db = firebase.firestore();
+        document.getElementById("sendtext-btn").onclick = function() {
+          const elements = document.getElementById("asses");
+          var asses_op = "no_answer";
+          if(elements.checked){
+            asses_op = elements.value;
+          }
+          const elements2 = document.getElementById("asses2");
+          if(elements2.checked){
+            asses_op = elements2.value;
+          }
+          const elements3 = document.getElementById("asses3");
+          if(elements3.checked){
+            asses_op = elements3.value;
+          }
+          //for (var i=0; i<elements.length; i++){
+            //if (elements[i].checked){
+              //asses_op = elements[i].value;
+            //}
+
+          var docData = {
+            date:firebase.firestore.Timestamp.fromDate(new Date()),
+            answer:asses_op,
+            answer_text:document.getElementById("sendtext-text").value
+          }
+          db.collection("datas").add(
+            docData
+            //{"answer":document.getElementById("asses").value}
+            //{"answer_text":document.getElementById("sendtext-text").value}
+          ).then(function() {
+                console.log("Document successfully written!");
+          window.location.href = "./index2.html";
+            });
+        };
+
+      });
+    </script>
+  </body>
+</html>
